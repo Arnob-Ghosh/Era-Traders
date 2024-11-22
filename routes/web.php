@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -42,3 +44,16 @@ Route::get('/users-list', [UserController::class, 'userList'])->name('admin.user
 Route::get('/user-edit/{id}', [UserController::class, 'userEdit'])->name('admin.user.edit.view');
 Route::put('/user-edit/{id}', [UserController::class, 'userUpdate'])->name('admin.users.update');
 Route::delete('/user-delete/{id}', [UserController::class, 'userDestroy'])->name('admin.users.destroy');
+
+
+// Route::middleware(['permission:client.create'])->group(function () {
+    Route::get('/client-create', [ClientController::class, 'create'])->middleware('auth')->name('client.create');
+    Route::post('/client-create', [ClientController::class, 'store'])->middleware('auth')->name('client.store');
+    // });
+    Route::get('/client-list-data', [ClientController::class, 'list'])->middleware('auth')->name('client.list');
+    // Route::middleware(['permission:client.edit'])->group(function () {
+    Route::get('/client-edit/{id}', [ClientController::class,'edit'])->middleware('auth')->name('client.edit.view');
+    Route::put('/client-edit/{id}', [ClientController::class,'update'])->middleware('auth')->name('client.edit');
+    // });
+    Route::delete('/client-delete/{id}', [ClientController::class,'destroy'])->name('client.destroy');
+    

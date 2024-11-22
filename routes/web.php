@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -57,3 +59,20 @@ Route::delete('/user-delete/{id}', [UserController::class, 'userDestroy'])->name
     // });
     Route::delete('/client-delete/{id}', [ClientController::class,'destroy'])->name('client.destroy');
     
+
+    // Route::middleware(['permission:product.create'])->group(function () {
+        Route::get('/product-create', [ProductController::class, 'create'])->middleware('auth')->name('product.create');
+        Route::post('/product-create', [ProductController::class, 'store'])->middleware('auth')->name('product.store');
+        // });
+        
+        // Route::middleware(['permission:product.list.view'])->group(function () {
+        Route::get('/product-list', [ProductController::class, 'listView'])->middleware('auth')->name('product.list.view');
+        Route::get('/product-list-data', [ProductController::class, 'list'])->middleware('auth')->name('product.list');
+        // });
+        
+        // Route::middleware(['permission:product.edit'])->group(function () {
+        Route::get('/product-edit/{id}', [ProductController::class,'edit'])->middleware('auth')->name('product.edit.view');
+        Route::post('/product-edit/{id}', [ProductController::class,'update'])->middleware('auth')->name('product.edit');
+        // });
+        
+        Route::delete('/product-delete/{id}', [ProductController::class,'destroy'])->name('product.destroy');

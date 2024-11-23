@@ -56,9 +56,13 @@ class ProductController extends Controller
         // Find the product to be edited
         $edit_product = Product::find($id);
         // Find the subcategory of the product
+        if ($edit_product) {
+            return response()->json([
+                'status' => 200,
+                'product' => $edit_product,
+            ]);
+        }
 
-        // Return view 'product.product_edit' with data
-        return view('product.product_edit');
     }
 
     // Function to update an existing product

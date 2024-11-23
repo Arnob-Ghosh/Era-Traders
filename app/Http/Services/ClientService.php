@@ -123,54 +123,6 @@ class ClientService
         return redirect()->route('client.create')->with('status', 'Deleted successfully!');
     }
 
-    // Fetch details of a specific client, including orders and payments.
-    public function details(Request $request, $id)
-    {
-        $client = Client::find($id);
 
-        // Fetch due payments for the client
-        $duePayment = DB::table("due_payments")
-            ->select(DB::raw("SUM(due_amount) as da"), "clientId")
-            ->where([
-                ['clientId', '=', $id],
-                ['subscriber_id', '=', Auth::user()->subscriber_id]
-            ])
-            ->groupBy("clientId")
-            ->get();
-
-        // Count orders made by the client
-        $ordersCount = Order::
-            where([
-                ['clientId', $id],
-                ['subscriber_id', '=', Auth::user()->subscriber_id]
-            ])
-            ->count();
-
-        // Fetch total payments made by the client
-        $payments = DB::table("payments")
-            ->select(DB::raw("SUM(total) as a"), "clientId")
-            ->where([
-                ['clientId', '=', $id],
-                ['subscriber_id', '=', Auth::user()->subscriber_id]
-            ])
-            ->groupBy("clientId")
-            ->get();
-
-        // Return JSON response if request is AJAX
-        if ($request->ajax()) {
-            return response()->json([
-                'message' => 'Success',
-                'order' => $order, // This variable seems undefined; you might need to define it
-            ]);
-        }
-
-        // Return view with client details, dues, orders count, and payments
-        return view('customer/customer-details', [
-            'customer' => $client,
-            'dues' => $duePayment,
-            'orders' => $ordersCount,
-            'payments' => $payments
-        ]);
-    }
 }
 

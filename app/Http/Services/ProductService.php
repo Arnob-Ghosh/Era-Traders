@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Services;
-
+use Log;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,12 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductService
 {
-    /**
-     * Store a newly created product.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
+   
     public function store(Request $request)
     {
         // Validation messages for required fields
@@ -68,16 +63,17 @@ class ProductService
 
     public function update(Request $request, $id)
     {
+        log::info($request);
         // Validation messages for required fields
         $messages = [
             'productName.required'    => "Product name is required.",
-            'brandname.required'      => "Brand name is required.",
+            'brand.required'      => "Brand name is required.",
         ];
 
         // Validation rules
         $validator = Validator::make($request->all(), [
             'productName'    => 'required',
-            'brandname'      => 'required',
+            'brand'      => 'required',
         ], $messages);
 
         // Check if validation passes
@@ -87,8 +83,8 @@ class ProductService
 
             // Update product attributes with request data
             $product->productName = $request->productName;
-            $product->brand = $request->brandname;
-            $product->barcode = $request->productbarcode;
+            $product->brand = $request->brand;
+            // $product->barcode = $request->productbarcode;
             $product->save();
 
             // Return success JSON response

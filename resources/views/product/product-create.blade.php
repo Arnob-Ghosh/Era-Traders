@@ -45,6 +45,43 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="EDITProductMODAL" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel"><strong>EDIT PRODUCT</strong></h5>
+                </div>
+                <form id="EDITProductFORM" enctype="multipart/form-data">
+                    <input type="hidden" name="_method" value="PUT">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" id="edit_productid">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="edit_productname" class="form-label">Product Name<span class="text-danger">*</span></label>
+                                    <input style="width: 70%" class="form-control" type="text" id="edit_productname" name="productName">
+                                    <h6 class="text-danger pt-1" id="edit_wrongproductname" style="font-size: 14px;"></h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="edit_brand" class="form-label">Brand<span class="text-danger">*</span></label>
+                                    <input style="width: 70%" class="form-control" type="text" id="edit_brand" name="brand">
+                                    <h6 class="text-danger pt-1" id="edit_wrongbrandname" style="font-size: 14px;"></h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
 
     <div class="modal fade" id="DELETEProductMODAL" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -64,7 +101,7 @@
 
                     <div class="modal-footer justify-content-center">
                         <button type="button" class="btn btn-outline-secondary cancel_btn"
-                            data-dismiss="modal">Cancel</button>
+                            data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="delete btn btn-outline-danger">Yes</button>
                     </div>
 
@@ -73,6 +110,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="CreateProductMODAL" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel"aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -120,7 +158,7 @@
 
                 <div class="modal-footer mt-2">
                     <button id="close" type="button" class="btn btn-secondary"
-                        data-dismiss="modal">Close</button>
+                        data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>
@@ -133,6 +171,10 @@
 
 
 <script>
+
+    
+
+
     $(document).ready(function () {
     var t = $('#product_table').DataTable({
         ajax: {
@@ -186,7 +228,7 @@
 function getBtns(data, type, row, meta) {
 
 var id = row.id;
-return '<a title="Edit" type="button" class="edit_btn btn btn-link btn-primary btn-lg "><i class="fa fa-edit "></i></a>\
+return '<a title="Edit" type="button" class="edit_btn btn btn-link btn-primary btn-lg" data-value="'+id+'"><i class="fa fa-edit "></i></a>\
         <a href="javascript:void(0)" class="delete_btn btn-link btn-danger" data-value="'+id+'"><i class="fa fa-trash"></i></a>';
 }
 
@@ -248,5 +290,63 @@ $('#wrongproductname').append('<span id="">'+productName+'</span>');
 $('#wrongbrandname').append('<span id="">'+brand+'</span>');
 }
    
+   // EDIT PRODUCT
+$(document).on("click", ".edit_btn", function () {
+    var productId = $(this).data("value");
+    $("#EDITProductMODAL").modal("show");
+
+    $.ajax({
+        type: "GET",
+        url: "/product-edit/" + productId,
+        success: function (response) {
+            if (response.status === 200) {
+                $("#edit_productid").val(response.product.id);
+                $("#edit_productname").val(response.product.productName);
+                $("#edit_brand").val(response.product.brand);
+            } else {
+                alert(response.message || "Failed to fetch product details.");
+            }
+        },
+    });
+});
+
+// SUBMIT UPDATED PRODUCT
+$(document).on("submit", "#EDITProductFORM", function (e) {
+    e.preventDefault();
+
+    var productId = $("#edit_productid").val();
+    var formData = new FormData($("#EDITProductFORM")[0]);
+
+    $.ajax({
+        type: "POST",
+        url: "/product-update/" + productId,
+        data: formData,
+        contentType: false,
+        processData: false,
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+        success: function (response) {
+            console.log(response)
+            if ($.isEmptyObject(response.error)) {
+                $("#EDITProductMODAL").modal("hide");
+                $("#EDITProductFORM")[0].reset();
+                $.notify(response.message, "success");
+                window.location.reload();
+            } else {
+                printEditErrorMsg(response.error);
+            }
+        },
+    });
+});
+
+function printEditErrorMsg(message) {
+    $("#edit_wrongproductname").empty();
+    $("#edit_wrongbrandname").empty();
+
+    $("#edit_wrongproductname").text(message.productName ? message.productName[0] : "");
+    $("#edit_wrongbrandname").text(message.brand ? message.brand[0] : "");
+}
+
 </script>
 @endsection

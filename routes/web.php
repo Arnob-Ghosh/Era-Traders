@@ -72,7 +72,7 @@ Route::delete('/user-delete/{id}', [UserController::class, 'userDestroy'])->name
         
         // Route::middleware(['permission:product.edit'])->group(function () {
         Route::get('/product-edit/{id}', [ProductController::class,'edit'])->middleware('auth')->name('product.edit.view');
-        Route::post('/product-edit/{id}', [ProductController::class,'update'])->middleware('auth')->name('product.edit');
+        Route::put('/product-update/{id}', [ProductController::class,'update'])->middleware('auth')->name('product.edit');
         // });
         
         Route::delete('/product-delete/{id}', [ProductController::class,'destroy'])->name('product.destroy');

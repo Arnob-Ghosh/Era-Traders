@@ -82,6 +82,20 @@
                         </div>
 
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="roles" style="font-weight: normal;">Assign Roles<span
+                                    class="text-danger"><strong>*</strong></span></label><br>
+                            <select name="roles" id="roles" class="form-select w-75" title="Select role" data-width="60%">
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                @endforeach
+                            </select>
+                            <h6 class="text-danger pt-1" id="wrongroles" style="font-size: 14px;"></h6>
+
+                        </div>
+
+                    </div>
 
 
 

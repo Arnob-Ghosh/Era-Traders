@@ -8,26 +8,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Log;    
 use Illuminate\Validation\Rules;
+use App\Models\Role;
 
 class UserController extends Controller
 {
     //
-    public function tables()
-    {
-        return view('tables.tables');
-    }
+  
     public function regUser()
     {
         // Fetch roles and stores associated with the authenticated user's subscriber_id
-        // $roles  = Role::where('subscriber_id', Auth::user()->subscriber_id)->get();
+        $roles  = Role::get();
         // Return the view with the fetched roles and stores data
-        return view('admin.create-user');
+        return view('admin.create-user',compact('roles'));
     }
 
     // Handle the registration of a new user
     public function storeUser(Request $request)
     {
-        log::info($request);
         // Custom validation error messages
         $messages = [
             'name.required' => "Name is required.",
@@ -46,7 +43,7 @@ class UserController extends Controller
             'name' => ['required', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'contactnumber' => ['required'],
-            // 'roles' => ['required'],
+            'roles' => ['required'],
             // 'store' => ['required'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ], $messages);
@@ -61,9 +58,9 @@ class UserController extends Controller
             ]);
 
             // Assign the roles to the user
-            // if ($request->roles) {
-            //     $user->assignRole($request->roles);
-            // }
+            if ($request->roles) {
+                $user->assignRole($request->roles);
+            }
             // Trigger the Registered event
             event(new Registered($user));
             // Redirect to the roles management page
@@ -76,11 +73,11 @@ class UserController extends Controller
     public function userList()
     {
         // Fetch roles and users associated with the authenticated user's subscriber_id
-        // $roles  = Role::where('subscriber_id', Auth::user()->subscriber_id)->get();
+        $roles  = Role::get();
         $users = User::get();
 
         // Return the view with the fetched users and roles data
-        return view('admin.user-index', compact('users'));
+        return view('admin.user-index', compact('users','roles'));
     }
 
     // Display the user edit form
@@ -88,16 +85,20 @@ class UserController extends Controller
     {
         // Find the user by ID
         $user = User::find($id);
+        $user_roles = $user->getRoleNames();
+        $roles  = Role::get();
+
         
         if ($request->ajax()) {
             return response()->json([
                 'status' => 200,
-                'user' => $user
+                'user' => $user,
+                'user_roles' => $user_roles
 
             ]);
         }
         // Return the view with the fetched user, roles, and stores data
-        return view('admin.user-edit', compact('user'));
+        return view('admin.user-edit', compact('user','roles'));
     }
 
     // Handle the update of an existing user
@@ -133,10 +134,10 @@ class UserController extends Controller
             }
             $user->save();
             // Detach and re-assign roles to the user
-            // $user->roles()->detach();
-            // if ($request->roles) {
-            //     $user->assignRole($request->roles);
-            // }
+            if ($request->roles) {
+                $user->roles()->detach();
+                $user->assignRole($request->roles);
+            }
 
             // Return success message as JSON response
             return response()->json([

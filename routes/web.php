@@ -1,12 +1,11 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
-
 
 
 /*
@@ -18,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return redirect('/login');
@@ -36,9 +35,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/tables', [UserController::class, 'tables']);
 
-require __DIR__.'/auth.php';
-
-
+require __DIR__ . '/auth.php';
 
 Route::get('/create-user', [UserController::class, 'regUser'])->name('user.create.view');
 Route::post('/create-user', [UserController::class, 'storeUser'])->name('user.create');
@@ -47,32 +44,44 @@ Route::get('/user-edit/{id}', [UserController::class, 'userEdit'])->name('admin.
 Route::put('/user-edit/{id}', [UserController::class, 'userUpdate'])->name('admin.users.update');
 Route::delete('/user-delete/{id}', [UserController::class, 'userDestroy'])->name('admin.users.destroy');
 
-
 // Route::middleware(['permission:client.create'])->group(function () {
-    Route::get('/client-create', [ClientController::class, 'create'])->middleware('auth')->name('client.create');
-    Route::post('/client-create', [ClientController::class, 'store'])->middleware('auth')->name('client.store');
-    // });
-    Route::get('/client-list-data', [ClientController::class, 'list'])->middleware('auth')->name('client.list');
-    // Route::middleware(['permission:client.edit'])->group(function () {
-    Route::get('/client-edit/{id}', [ClientController::class,'edit'])->middleware('auth')->name('client.edit.view');
-    Route::put('/client-edit/{id}', [ClientController::class,'update'])->middleware('auth')->name('client.edit');
-    // });
-    Route::delete('/client-delete/{id}', [ClientController::class,'destroy'])->name('client.destroy');
-    
+Route::get('/client-create', [ClientController::class, 'create'])->middleware('auth')->name('client.create');
+Route::post('/client-create', [ClientController::class, 'store'])->middleware('auth')->name('client.store');
+// });
+Route::get('/client-list-data', [ClientController::class, 'list'])->middleware('auth')->name('client.list');
+// Route::middleware(['permission:client.edit'])->group(function () {
+Route::get('/client-edit/{id}', [ClientController::class, 'edit'])->middleware('auth')->name('client.edit.view');
+Route::put('/client-edit/{id}', [ClientController::class, 'update'])->middleware('auth')->name('client.edit');
+// });
+Route::delete('/client-delete/{id}', [ClientController::class, 'destroy'])->name('client.destroy');
 
-    // Route::middleware(['permission:product.create'])->group(function () {
-        Route::get('/product-create', [ProductController::class, 'create'])->middleware('auth')->name('product.create');
-        Route::post('/product-create', [ProductController::class, 'store'])->middleware('auth')->name('product.store');
-        // });
-        
-        // Route::middleware(['permission:product.list.view'])->group(function () {
-        Route::get('/product-list', [ProductController::class, 'listView'])->middleware('auth')->name('product.list.view');
-        Route::get('/product-list-data', [ProductController::class, 'list'])->middleware('auth')->name('product.list');
-        // });
-        
-        // Route::middleware(['permission:product.edit'])->group(function () {
-        Route::get('/product-edit/{id}', [ProductController::class,'edit'])->middleware('auth')->name('product.edit.view');
-        Route::put('/product-update/{id}', [ProductController::class,'update'])->middleware('auth')->name('product.edit');
-        // });
-        
-        Route::delete('/product-delete/{id}', [ProductController::class,'destroy'])->name('product.destroy');
+// Route::middleware(['permission:product.create'])->group(function () {
+Route::get('/product-create', [ProductController::class, 'create'])->middleware('auth')->name('product.create');
+Route::post('/product-create', [ProductController::class, 'store'])->middleware('auth')->name('product.store');
+// });
+
+// Route::middleware(['permission:product.list.view'])->group(function () {
+Route::get('/product-list', [ProductController::class, 'listView'])->middleware('auth')->name('product.list.view');
+Route::get('/product-list-data', [ProductController::class, 'list'])->middleware('auth')->name('product.list');
+// });
+
+// Route::middleware(['permission:product.edit'])->group(function () {
+Route::get('/product-edit/{id}', [ProductController::class, 'edit'])->middleware('auth')->name('product.edit.view');
+Route::put('/product-update/{id}', [ProductController::class, 'update'])->middleware('auth')->name('product.edit');
+// });
+
+Route::delete('/product-delete/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+
+// Route::middleware(['permission:category.create'])->group(function () {
+Route::get('/category-create', [CategoryController::class, 'create'])->middleware('auth')->name('category.create');
+Route::post('/category-create', [CategoryController::class, 'store'])->middleware('auth')->name('category.store');
+// });
+Route::get('/category-list-data', [CategoryController::class, 'list'])->middleware('auth')->middleware('auth')->name('category.list');
+
+// Route::middleware(['permission:category.edit'])->group(function () {
+
+Route::get('/category-edit/{id}', [CategoryController::class, 'edit'])->middleware('auth')->name('category.edit.view');
+Route::put('/category-edit/{id}', [CategoryController::class, 'update'])->middleware('auth')->name('category.edit');
+// });
+
+Route::delete('/category-delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');

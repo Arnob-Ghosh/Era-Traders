@@ -4,10 +4,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductInController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -91,7 +93,11 @@ Route::put('/category-edit/{id}', [CategoryController::class, 'update'])->middle
 Route::delete('/category-delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 
-
+// Route::middleware(['permission:productin.view'])->group(function () {
+    Route::get('/product-in', [ProductInController::class, 'view'])->middleware('auth')->name('productin.view');
+    Route::post('/product-in', [ProductInController::class, 'store'])->middleware('auth')->name('productin.store');
+    // });
+Route::get('/product/{id}/categories', [ProductController::class, 'getCategoriesForProduct']);
 
 // Route::middleware(['role:Admin'])->group(function () {
     Route::get('/permission-list', [PermissionController::class, 'index'])->name('permission.list');

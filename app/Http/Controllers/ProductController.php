@@ -80,6 +80,13 @@ class ProductController extends Controller
         // Call the destroy method from ProductService and pass the product ID
         return $this->product_service->destroy($id);
     }
+    public function getCategoriesForProduct($productId)
+{
+    // Assuming the product has a relationship to categories
+    $product = Product::with('categories')->findOrFail($productId);
+    return response()->json($product->categories);
+}
+
 
 }
 ?>

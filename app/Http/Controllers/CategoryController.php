@@ -30,6 +30,7 @@ class CategoryController extends Controller
             $category = new Category;
 
             $category->category_name = $req->categoryname;
+            $category->code = $req->categorycode;
             $category->save();
 
             return response()->json([
@@ -78,6 +79,7 @@ class CategoryController extends Controller
         if ($validator->passes()) {
             $category = Category::find($id);
             $category->category_name = $req->categoryname;
+            $category->code = $req->categorycode;
             $category->save();
 
             return response()->json([

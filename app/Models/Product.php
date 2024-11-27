@@ -15,5 +15,9 @@ class Product extends Model
         'barcode',
 
     ];
+    public function categories()
+{
+    return $this->hasMany(ProductCategory::class, 'product_id');
+}
 
 }

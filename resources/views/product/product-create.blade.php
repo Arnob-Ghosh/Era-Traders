@@ -1,4 +1,7 @@
 @extends('layouts.admin')
+<!-- Bootstrap Select CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+
 
 @section('content')
     <div class="page-inner">
@@ -30,6 +33,7 @@
                                         <th>#</th>
                                         <th>Name</th>
                                         <th>Brand</th>
+                                        <th>Categories</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -69,6 +73,20 @@
                                     <label for="edit_brand" class="form-label">Brand<span class="text-danger">*</span></label>
                                     <input style="width: 70%" class="form-control" type="text" id="edit_brand" name="brand">
                                     <h6 class="text-danger pt-1" id="edit_wrongbrandname" style="font-size: 14px;"></h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="category" class="form-label" style="font-weight: normal;">
+                                        Category<span class="text-danger"><strong>*</strong></span>
+                                    </label><br>
+                                    <select id="edit_category" name="edit_category[]" class="form-control selectpicker" multiple data-live-search="true" data-width="70%">
+                                        @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                            
+                                        @endforeach
+                                        
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -144,13 +162,25 @@
                                     <label for="brandname" class="form-label" style="font-weight: normal;">Brand<span class="text-danger"><strong>*</strong> </span></label><br>
                                     <input style="width:70%" class="form-control " type="text"
                                     name="brand" id="brand" >
-                                    <h6 class="text-danger pt-1" id="wrongbrandname"
-                                        style="font-size: 14px;"></h6>
+                                    <h6 class="text-danger pt-1" id="wrongbrandname" style="font-size: 14px;"></h6>
                                 </div>
                             </div>
 
                     </div>
-                 
+                    <div class="col-12">
+                        <div class="mb-3">
+                            <label for="category" class="form-label" style="font-weight: normal;">
+                                Category<span class="text-danger"><strong>*</strong></span>
+                            </label><br>
+                            <select id="category" name="category[]" class="form-control selectpicker" multiple data-live-search="true" data-width="70%">
+                                @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                    
+                                @endforeach
+                                
+                            </select>
+                        </div>
+                    </div>
                    
                  
                    
@@ -170,6 +200,9 @@
 @section('js')
 
 
+
+<!-- Bootstrap Select JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
 <script>
 
     
@@ -194,6 +227,15 @@
             { 
                 data: 'brand'
             },
+            { 
+            data: null, // Categories column
+            render: function(data, type, row) {
+                // Extract category names and join them with commas
+                return row.categories.map(function(category) {
+                    return category.category_name;
+                }).join(', ');
+            }
+        },
             { 
                 data: 'id',
                 render: getBtns
@@ -293,7 +335,6 @@ $('#wrongbrandname').append('<span id="">'+brand+'</span>');
    // EDIT PRODUCT
 $(document).on("click", ".edit_btn", function () {
     var productId = $(this).data("value");
-    $("#EDITProductMODAL").modal("show");
 
     $.ajax({
         type: "GET",
@@ -303,6 +344,10 @@ $(document).on("click", ".edit_btn", function () {
                 $("#edit_productid").val(response.product.id);
                 $("#edit_productname").val(response.product.productName);
                 $("#edit_brand").val(response.product.brand);
+                var selectedCategories = response.product.categories.map(category => category.category_id); // Extract category IDs
+            $("#edit_category").val(selectedCategories).selectpicker("refresh"); // Update selectpicker
+            $("#EDITProductMODAL").modal("show");
+
             } else {
                 alert(response.message || "Failed to fetch product details.");
             }
@@ -327,7 +372,6 @@ $(document).on("submit", "#EDITProductFORM", function (e) {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
         },
         success: function (response) {
-            console.log(response)
             if ($.isEmptyObject(response.error)) {
                 $("#EDITProductMODAL").modal("hide");
                 $("#EDITProductFORM")[0].reset();

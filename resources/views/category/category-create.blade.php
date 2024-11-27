@@ -23,6 +23,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Category</th>
+                                <th>code</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -61,6 +62,12 @@
                             <div id="" class="form-text"><strong>N.B. </strong>Be sure to make your category name
                                 meaningful.</div>
                             <h6 class="text-danger pt-1" id="wrongcategoryname" style="font-size: 14px;"></h6>
+                            <label class="form-label">Category Code<span
+                                class="text-danger"><strong></strong></span></label>
+                        <input type="text" id="categorycode" name="categorycode"
+                            class="form-control form-control-outline">
+                        <h6 class="text-danger pt-1" id="wrongcategorycode" style="font-size: 14px;"></h6>
+
                         </div>
 
 
@@ -102,6 +109,11 @@
                             <div id="" class="form-text"><strong>N.B. </strong>Be sure to make your category name
                                 meaningful.</div>
                             <h6 class="text-danger pt-1" id="edit_wrongcategoryname" style="font-size: 14px;"></h6>
+                            <label class="form-label">Category Code<span
+                                class="text-danger"><strong></strong></span></label>
+                        <input type="text" id="edit_categorycode" name="categorycode" class="form-control">
+                       
+                        <h6 class="text-danger pt-1" id="edit_wrongcategorycode" style="font-size: 14px;"></h6>
                         </div>
                     
                     </div>
@@ -227,6 +239,7 @@
 
                     if (response.status == 200) {
                         $('#edit_categoryname').val(response.category.category_name);
+                        $('#edit_categorycode').val(response.category.code);
                         $('#categoryid').val(categoryId);
                     }
                 }
@@ -305,7 +318,9 @@
                             {
                                 data: 'category_name'
                             },
-                 
+                            {
+                                data: 'code'
+                            },
                             {
                                 render: getBtns
                             },

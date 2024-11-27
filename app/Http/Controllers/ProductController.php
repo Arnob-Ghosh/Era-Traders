@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Log; // Importing Log for logging purposes
+use App\Http\Services\ProductService;
+use App\Models\Category;
 use App\Models\Product; // Importing Product model
 use Illuminate\Http\Request;
-use App\Http\Services\ProductService;
+use Log; // Importing Log for logging purposes
 
 class ProductController extends Controller
 {
@@ -21,10 +22,10 @@ class ProductController extends Controller
     // Function to display the create product form
     public function create()
     {
-       
+       $categories= Category::all();
 
         // Return view 'product.product-create' with data
-        return view('product.product-create');
+        return view('product.product-create',compact('categories'));
     }
 
     // Function to handle storing a new product
@@ -54,7 +55,8 @@ class ProductController extends Controller
         
 
         // Find the product to be edited
-        $edit_product = Product::find($id);
+        $edit_product = Product::with('categories')->find($id);
+        log::info($edit_product);
         // Find the subcategory of the product
         if ($edit_product) {
             return response()->json([

@@ -40,11 +40,22 @@ class ProductInController extends Controller
     // Function to store product in
     public function store(Request $request)
     {
-        log::info($request);
         // Call the store method from ProductInService and pass the request
         return $this->productin_service->store($request);
     }
   
-    
+    public function report()
+    {
+        // Retrieve necessary data from models
+
+
+        // Return view 'product.product-in' with data
+        return view('product.product-in-report');
+    }
+    public function report_data(Request $request)
+    {
+        return $this->productin_service->report_data($request);
+
+    }
 }
 

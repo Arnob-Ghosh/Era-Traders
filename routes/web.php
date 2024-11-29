@@ -98,7 +98,10 @@ Route::delete('/category-delete/{id}', [CategoryController::class, 'destroy'])->
     Route::post('/product-in', [ProductInController::class, 'store'])->middleware('auth')->name('productin.store');
     // });
 Route::get('/product/{id}/categories', [ProductController::class, 'getCategoriesForProduct']);
-
+// Route::middleware(['permission:productin.view'])->group(function () {
+    Route::get('/product-in-report', [ProductInController::class, 'report'])->middleware('auth')->name('productin.report.view');
+    Route::get('/product-in-report-data', [ProductInController::class, 'report_data'])->middleware('auth')->name('productin.report');
+    // });
 // Route::middleware(['role:Admin'])->group(function () {
     Route::get('/permission-list', [PermissionController::class, 'index'])->name('permission.list');
     Route::get('/permission-list-data', [PermissionController::class, 'listData'])->name('permission.list.data');

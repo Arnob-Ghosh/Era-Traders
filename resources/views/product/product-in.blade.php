@@ -15,11 +15,8 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <h4 class="card-title">Add Product</h4>
-                            <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal"
-                                data-bs-target="#CreateProductMODAL">
-                                <i class="fa fa-plus"></i> Product In
-                            </button>
+                            <h4 class="card-title">Product In</h4>
+                        
                         </div>
                     </div>
                     <div class="card-body">
@@ -131,6 +128,7 @@
                                         <th>Unit</th>
                                         <th>Sub Unit</th>
                                         <th>Unit Price</th>
+                                        <th>Sub Unit Quantity</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -231,6 +229,7 @@
             var unit = $('#unit').val();
             var sub_unit = $('#sub_unit_type').val();
             var unit_price = $('#price').val();
+            var subunit = $('#subunit').val();
 
             if (product && category && quantity && unit  && unit_price) {
                 var tableRow = `<tr>
@@ -247,6 +246,7 @@
                     <td class="d-none">${category}</td> <!-- Category ID -->
                     <td class="d-none">${unit}</td> <!-- Unit ID -->
                     <td class="d-none">${sub_unit}</td> <!-- Subunit ID -->
+                    <td>${subunit}</td>
 
                     <!-- Actions -->
                     <td>
@@ -285,7 +285,8 @@
                 unit_price: $(this).find('td').eq(5).text(), // Unit Price
                 product_name: $(this).find('td').eq(0).text(), // Product Name (visible)
                 category_name: $(this).find('td').eq(1).text(), // Category Name (visible)
-                sub_unit_name: $(this).find('td').eq(4).text() // Subunit Name (visible)
+                sub_unit_name: $(this).find('td').eq(4).text(), // Subunit Name (visible)
+                subunit: $(this).find('td').eq(10).text() // Subunit Name (visible)
             };
 
             // Push the row data to the tableData array

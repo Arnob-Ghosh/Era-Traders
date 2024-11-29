@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductInController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -102,6 +104,10 @@ Route::get('/product/{id}/categories', [ProductController::class, 'getCategories
     Route::get('/product-in-report', [ProductInController::class, 'report'])->middleware('auth')->name('productin.report.view');
     Route::get('/product-in-report-data', [ProductInController::class, 'report_data'])->middleware('auth')->name('productin.report');
     // });
+    // Route::middleware(['permission:productin.view'])->group(function () {
+        Route::get('/inventory-report', [InventoryController::class, 'report'])->middleware('auth')->name('productin.report.view');
+        Route::get('/inventory-report-data', [InventoryController::class, 'report_data'])->middleware('auth')->name('productin.report');
+        // });
 // Route::middleware(['role:Admin'])->group(function () {
     Route::get('/permission-list', [PermissionController::class, 'index'])->name('permission.list');
     Route::get('/permission-list-data', [PermissionController::class, 'listData'])->name('permission.list.data');

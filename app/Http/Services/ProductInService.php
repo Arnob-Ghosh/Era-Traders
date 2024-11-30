@@ -80,7 +80,7 @@ class ProductInService
                     // Update the existing inventory record
                     $inventory->update([
                         'unit_quantity' => $inventory->unit_quantity + $quantity,
-                        'sub_unit_quantity' => $inventory->sub_unit_quantity + $quantity * $subUnitQuantity,
+                        // 'sub_unit_quantity' => $inventory->sub_unit_quantity + $quantity * $subUnitQuantity,
                     ]);
                 } else {
                     Inventory::create([
@@ -94,7 +94,7 @@ class ProductInService
                         'sub_unit_name' => $productData['sub_unit_name'],
                         'sub_unit' => $subUnitQuantity,
                         'unit_quantity' => $quantity,
-                        'sub_unit_quantity' => $quantity * $subUnitQuantity,
+                        'sub_unit_quantity' => 0,
                         'unit_price' => $calculatedUnitPrice,
                         'sub_unit_price' => $calculatedSubUnitPrice,
                     ]);

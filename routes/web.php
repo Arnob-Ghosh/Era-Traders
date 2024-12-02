@@ -110,6 +110,13 @@ Route::get('/sales', [SalesController::class, 'view'])->middleware('auth')->name
 Route::get('/sales-inventory-data', [SalesController::class, 'data'])->middleware('auth');
 Route::post('/sales-store', [SalesController::class, 'store'])->middleware('auth');
 // });
+
+// Route::middleware(['permission:productin.view'])->group(function () {
+    Route::get('/sales-report', [SalesController::class, 'report_view'])->middleware('auth')->name('sales.view');
+    Route::get('/sales-report-data', [SalesController::class, 'report_data'])->middleware('auth');
+    Route::post('/sales-report-invoice', [SalesController::class, 'getInvoiceData']);
+
+    // });
 // Route::middleware(['role:Admin'])->group(function () {
 Route::get('/permission-list', [PermissionController::class, 'index'])->name('permission.list');
 Route::get('/permission-list-data', [PermissionController::class, 'listData'])->name('permission.list.data');

@@ -153,6 +153,91 @@ class SalesController extends Controller
             ], 400);
         }
     }
+
+
+    public function report_view()
+    {
+        // Retrieve necessary data from models
+
+        $customers = Client::all();
+        // Return view 'product.product-in' with data
+        return view('sales.sales-report', compact('customers'));
+    }
+
+    public function report_data(Request $request)
+    {
+        // Validate the incoming request data
+         // Disable ONLY_FULL_GROUP_BY mode for the current session
+        // DB::statement("SET sql_mode=(SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));");
+        $validated = $request->validate([
+            'startdate' => 'required|date', // Ensure a valid start date
+            'enddate'   => 'required|date|after_or_equal:startdate', // Ensure a valid end date, after or same as start date
+            'client'    => 'nullable|string', // Client can be null or a string
+        ]);
+    
+        try {
+            // Initialize the query with date range and grouping by ref_id
+            $query = Sales::query()
+                ->selectRaw('ref_id, SUM(sale_price) as total_sale_price,customer_name,date')
+                ->whereBetween('date', [$validated['startdate'], $validated['enddate']]);
+    
+            // Filter by client if provided and not "all"
+            if (!empty($validated['client']) && $validated['client'] !== 'all') {
+                $query->where('customer_id', $validated['client']);
+            }
+    
+            // Group the query by ref_id and get the results
+            $data = $query->groupBy('ref_id','customer_name','date')->get();
+    
+            return response()->json([
+                'status' => 200,
+                'data'   => $data,
+            ]);
+        } catch (\Exception $e) {
+            // Catch unexpected errors and return a user-friendly response
+            return response()->json([
+                'status'  => 500,
+                'message' => 'An error occurred while fetching report data.',
+                'error'   => $e->getMessage(),
+            ]);
+        }
+    }
+
+    public function getInvoiceData(Request $request)
+{
+    $refId = $request->input('ref_id');
+    // Fetch sales data by ref_id
+    $salesData = Sales::where('ref_id', $refId)->get();
+    $customer_mobile=Client::find($salesData[0]->customer_id);
+
+    if ($salesData->isEmpty()) {
+        return response()->json(['error' => 'No data found'], 404);
+    }
+
+    // Format response
+    $response = [
+        'ref_id' => $refId,
+        'customer_name' => $salesData[0]->customer_name,
+        'customer_mobile' => $customer_mobile->mobile,
+        'date' => $salesData[0]->date,
+        'items' => $salesData->map(function ($item) {
+            return [
+                'product_name' => $item->product_name,
+                'category_name' => $item->category_name,
+                'sale_unit' => $item->sale_unit,
+                'sale_quantity' => $item->sale_quantity,
+                'unit_price' => $item->unit_price,
+                'sale_price' => $item->sale_price,
+            ];
+        }),
+        'total_sale_price' => $salesData->sum('sale_price'),
+    ];
+
+    return response()->json($response);
+}
+
+    
+    
     
 
 }

@@ -42,12 +42,6 @@ Route::get('/tables', [UserController::class, 'tables']);
 
 require __DIR__ . '/auth.php';
 
-Route::get('/create-user', [UserController::class, 'regUser'])->name('user.create.view');
-Route::post('/create-user', [UserController::class, 'storeUser'])->name('user.create');
-Route::get('/users-list', [UserController::class, 'userList'])->name('admin.user.list');
-Route::get('/user-edit/{id}', [UserController::class, 'userEdit'])->name('admin.user.edit.view');
-Route::put('/user-edit/{id}', [UserController::class, 'userUpdate'])->name('admin.users.update');
-Route::delete('/user-delete/{id}', [UserController::class, 'userDestroy'])->name('admin.users.destroy');
 
 Route::middleware(['permission:client.create'])->group(function () {
     Route::get('/client-create', [ClientController::class, 'create'])->middleware('auth')->name('client.create');
@@ -118,6 +112,15 @@ Route::post('/sales-store', [SalesController::class, 'store'])->middleware('auth
 
     // });
 // Route::middleware(['role:Admin'])->group(function () {
+
+
+Route::get('/create-user', [UserController::class, 'regUser'])->name('user.create.view');
+Route::post('/create-user', [UserController::class, 'storeUser'])->name('user.create');
+Route::get('/users-list', [UserController::class, 'userList'])->name('admin.user.list');
+Route::get('/user-edit/{id}', [UserController::class, 'userEdit'])->name('admin.user.edit.view');
+Route::put('/user-edit/{id}', [UserController::class, 'userUpdate'])->name('admin.users.update');
+Route::delete('/user-delete/{id}', [UserController::class, 'userDestroy'])->name('admin.users.destroy');
+
 Route::get('/permission-list', [PermissionController::class, 'index'])->name('permission.list');
 Route::get('/permission-list-data', [PermissionController::class, 'listData'])->name('permission.list.data');
 

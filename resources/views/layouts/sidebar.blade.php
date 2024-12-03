@@ -56,41 +56,113 @@
                                             <span class="sub-item">Buttons</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="components/gridsystem.html">
-                                            <span class="sub-item">Grid System</span>
+                                    
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#product-setting">
+                                <i class="fas fa-box-open"></i>
+                                <p>Product Setting</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="product-setting">
+                                <ul class="nav nav-collapse">
+                                    <li class="nav-item {{ request()->is('category-create') ? 'active' : '' }}">
+                                        <a href="/category-create">
+                                            <span class="sub-item">Categories</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="components/panels.html">
-                                            <span class="sub-item">Panels</span>
+                                    <li class="nav-item {{ request()->is('product-create') ? 'active' : '' }}">
+                                        <a href="/product-create">
+                                            <span class="sub-item">Products</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="components/notifications.html">
-                                            <span class="sub-item">Notifications</span>
+                                   
+                                    
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#sale">
+                                <i class="fas fa-box"></i>
+                                <p>Sale </p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="sale">
+                                <ul class="nav nav-collapse">
+                                    <li class="nav-item {{ request()->is('sales') ? 'active' : '' }}">
+                                        <a href="/sales">
+                                            <span class="sub-item">Sales</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="components/sweetalert.html">
-                                            <span class="sub-item">Sweet Alert</span>
+                                    
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#stock">
+                                <i class="fas fa-box"></i>
+                                <p>Stock </p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="stock">
+                                <ul class="nav nav-collapse">
+                                    <li class="nav-item {{ request()->is('product-in') ? 'active' : '' }}">
+                                        <a href="/product-in">
+                                            <span class="sub-item">Product In</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="components/font-awesome-icons.html">
-                                            <span class="sub-item">Font Awesome Icons</span>
+                                    <li class="nav-item {{ request()->is('/inventory-report') ? 'active' : '' }}">
+                                        <a href="/inventory-report">
+                                            <span class="sub-item">Inventory</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="components/simple-line-icons.html">
-                                            <span class="sub-item">Simple Line Icons</span>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#reports">
+                                <i class="fas fa-chart-line"></i>
+                                <p>Reports</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="reports">
+                                <ul class="nav nav-collapse">
+                                    <li class="nav-item {{ request()->is('product-in-report') ? 'active' : '' }}">
+                                        <a href="/product-in-report">
+                                            <span class="sub-item">Product In Report</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="components/typography.html">
-                                            <span class="sub-item">Typography</span>
+                                    <li class="nav-item {{ request()->is('sales-report') ? 'active' : '' }}">
+                                        <a href="/sales-report">
+                                            <span class="sub-item">Sales Report</span>
                                         </a>
                                     </li>
+                                   
+                                    
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#user-management">
+                                <i class="fas fa-users"></i>
+                                <p>User Management</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="user-management">
+                                <ul class="nav nav-collapse">
+                                    <li class="nav-item {{ request()->is('users-list') ? 'active' : '' }}">
+                                        <a href="/users-list">
+                                            <span class="sub-item">User</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item {{ request()->is('role-list') ? 'active' : '' }}">
+                                        <a href="/role-list">
+                                            <span class="sub-item">Roles</span>
+                                        </a>
+                                    </li>
+                                    
                                 </ul>
                             </div>
                         </li>

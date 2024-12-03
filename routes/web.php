@@ -27,6 +27,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/login');
 });
+Route::get('/clear', function () {
+    // Run Artisan commands
+    Artisan::call('optimize:clear');
+    return redirect()->back();
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

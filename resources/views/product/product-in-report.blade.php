@@ -163,8 +163,8 @@
                     [5, 10, 20, -1],
                     [5, 10, 20, 'Todos']
                 ],
-                dom: 'lBfrtip',
-                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                buttons: ['excel', 'print'],
+                dom: '<"row"<"col-sm-1"l><"col-sm-2"B>>' + 'frtip',
             });
 
             // Re-draw the table on form submission

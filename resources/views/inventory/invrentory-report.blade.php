@@ -1,10 +1,5 @@
 @extends('layouts.admin')
-<style>
-    .dataTables_wrapper .dt-buttons {
-    float: right;
-}
 
-</style>
 <!-- Bootstrap Select CSS -->
 
     
@@ -21,10 +16,10 @@
                           style="height: 50px; width: 50px; ">
                         <i class="fa fa-dollar-sign" style="font-size: 20px; color: white;"></i>
                     </span>
-                    <div>
-                        <h5 class="mb-1">
-                            <b id="stock"> </b>
-                        </h5>
+                    <div ><h4 id="stock_price"> Total Stock Price: </h4>
+                        <!-- Empty div that needs to be populated with inventory data -->
+                        <!-- Based on the controller, this should display the total inventory price ($inventory_price) -->
+                        <!-- Need to add JavaScript to populate this div using the AJAX response data -->
                     </div>
                 </div>
             </div>
@@ -66,13 +61,7 @@
 @endsection
 
 @section('js')
-    <!-- DataTables Buttons JS -->
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+   
     <script>
         $(document).ready(function() {
             var t = $('#inventory_table').DataTable({
@@ -83,8 +72,9 @@
                     url: "/inventory-report-data",
                     dataSrc: function(json) {
                         // Update the stock value with the price from the response
+                        console.log(json);
                         if (json.price) {
-                            $('#stock').text(' Total Stock Price: ' + json.price.toFixed(2));
+                            $('#stock_price').append( json.price.toFixed(2)+' ৳');
                         }
                         return json.data;
                     },

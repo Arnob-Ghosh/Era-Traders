@@ -92,7 +92,7 @@
                                             <span class="sub-item">Product In</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item {{ request()->is('/inventory-report') ? 'active' : '' }}">
+                                    <li class="nav-item {{ request()->is('inventory-report') ? 'active' : '' }}">
                                         <a href="/inventory-report">
                                             <span class="sub-item">Inventory</span>
                                         </a>

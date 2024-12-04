@@ -38,6 +38,15 @@
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('') }}assets/css/demo.css" />
+    <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+<!-- DataTables Bootstrap 5 Integration CSS -->
+    <link href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<style>
+    .dataTables_wrapper .dt-buttons {
+    float: right;
+}
+
+</style>
 </head>
 
 <body>
@@ -94,6 +103,7 @@
     <script src="{{ asset('') }}assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
     
     <script src="../assets/js/plugin/datatables/datatables.min.js"></script>
+    
 
     <!-- Chart JS -->
     <script src="{{ asset('') }}assets/js/plugin/chart.js/chart.min.js"></script>
@@ -106,6 +116,13 @@
 
     <!-- Datatables -->
     <script src="{{ asset('') }}assets/js/plugin/datatables/datatables.min.js"></script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
     <!-- Bootstrap Notify -->
     <script src="{{ asset('') }}assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>

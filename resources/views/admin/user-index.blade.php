@@ -6,20 +6,15 @@
             <h3 class="fw-bold mb-3">User Management</h3>
             <ul class="breadcrumbs mb-3">
                 <li class="nav-home">
-                    <a href="#">
+                    <a href="/dashboard">
                         <i class="icon-home"></i>
                     </a>
                 </li>
                 <li class="separator">
                     <i class="icon-arrow-right"></i>
                 </li>
-                <li class="nav-item">
-                    <a href="#">Tables</a>
-                </li>
-                <li class="separator">
-                    <i class="icon-arrow-right"></i>
-                </li>
               
+
             </ul>
         </div>
 
@@ -37,7 +32,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Modal -->
-                       
+
 
                         <div class="table-responsive">
                             <table id="menu_table" class="display table table-striped table-hover">
@@ -50,37 +45,38 @@
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
-                               
+
                                 <tbody>
-                                    @foreach($users as $user)
-                                    <tr>
-                                        <td>{{ $loop->index+1 }}</td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->contact_number }}</td>
-                                        
-                                <td>
+                                    @foreach ($users as $user)
+                                        <tr>
+                                            <td>{{ $loop->index + 1 }}</td>
+                                            <td>{{ $user->name }}</td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->contact_number }}</td>
 
-                                    <a class="edit_btn btn btn-link btn-primary btn-lg"
-                                        href="{{ route('admin.user.edit.view', $user->id) }}"> <i class="fa fa-edit"></i></a>
+                                            <td>
 
-                                    <a class="delete_btn btn btn-link btn-danger"
-                                        href="{{ route('admin.users.destroy', $user->id) }}"
-                                        onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">
-                                        <i class="fas fa-trash "></i>
-                                    </a>
+                                                <a class="edit_btn btn btn-link btn-primary btn-lg"
+                                                    href="{{ route('admin.user.edit.view', $user->id) }}"> <i
+                                                        class="fa fa-edit"></i></a>
 
-                                    <form id="delete-form-{{ $user->id }}"
-                                        action="{{ route('admin.users.destroy', $user->id) }}"
-                                        method="POST" style="display: none;">
-                                        @method('DELETE')
-                                        @csrf
-                                    </form>
-                                
-                                </td>
-                                </tr>
-                                @endforeach
-               
+                                                <a class="delete_btn btn btn-link btn-danger"
+                                                    href="{{ route('admin.users.destroy', $user->id) }}"
+                                                    onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">
+                                                    <i class="fas fa-trash "></i>
+                                                </a>
+
+                                                <form id="delete-form-{{ $user->id }}"
+                                                    action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
+                                                    style="display: none;">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
                                 </tbody>
                             </table>
                         </div>
@@ -91,21 +87,38 @@
     </div>
 @endsection
 @section('js')
-
-
-<script>
-        $(document).ready(function () {
+    <script>
+        $(document).ready(function() {
             $('#menu_table').DataTable({
-    pageLength: 10, // Default rows per page
-    lengthMenu: [
-        [5, 10, 20, -1], // Options: 5, 10, 20, or All
-        [5, 10, 20, 'All'] // Display labels
-    ],
-    paging: true, // Enable paging
-    searching: true, // Enable the search box
-});
+                pageLength: 10, // Default rows per page
+                lengthMenu: [
+                    [5, 10, 20, -1], // Options: 5, 10, 20, or All
+                    [5, 10, 20, 'All'] // Display labels
+                ],
+                paging: true, // Enable paging
+                searching: true, // Enable the search box
+            });
 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            // Check for flash messages
+            @if (session("status"))
+                $.notify('{{ session("status") }}', {
+                    className: 'success',
+                    position: 'top right'
+                })
+                
+            @endif
+
+            @if (session("error"))
+                $.notify('{{ session("error") }}', {
+                    className: 'error',
+                    position: 'top right'
+                })
+            @endif
         });
-
-</script>
+    </script>
 @endsection

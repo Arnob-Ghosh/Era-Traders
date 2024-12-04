@@ -300,6 +300,29 @@
                 $('#DELETECategoryMODAL').modal('show');
 
             });
+
+
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            // Check for flash messages
+            @if (session("status"))
+                $.notify('{{ session("status") }}', {
+                    className: 'success',
+                    position: 'top right'
+                })
+                
+            @endif
+
+            @if (session("error"))
+                $.notify('{{ session("error") }}', {
+                    className: 'error',
+                    position: 'top right'
+                })
+            @endif
         });
 
         $(document).ready(function() {

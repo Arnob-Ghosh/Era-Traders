@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Log;
 use App\Models\Category;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Log;
 
 class CategoryController extends Controller
 {
@@ -82,6 +83,12 @@ class CategoryController extends Controller
             $category->code = $req->categorycode;
             $category->save();
 
+            $productcategory = ProductCategory::where('category_id', $id)->get();
+            foreach ($productcategory as $product) {
+                $product->category_name = $req->categoryname;
+                $product->save();
+            }
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Category updated successfully'
@@ -95,6 +102,9 @@ class CategoryController extends Controller
     {
         Category::find($id)->delete($id);
 
-        return redirect()->route('category.create')->with('status', 'Deleted successfully!');
+        return response()->json([
+            'status' => 200,
+            'message' => 'Deleted successfully!'
+        ]);
     }
 }

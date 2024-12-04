@@ -38,28 +38,7 @@
                             </span>
                             <h4 class="text-section">Components</h4>
                         </li>
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#base">
-                                <i class="fas fa-layer-group"></i>
-                                <p>Base</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="base">
-                                <ul class="nav nav-collapse">
-                                    <li class="nav-item {{ request()->is('tables') ? 'active' : '' }}">
-                                        <a href="/tables">
-                                            <span class="sub-item">tables</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="components/buttons.html">
-                                            <span class="sub-item">Buttons</span>
-                                        </a>
-                                    </li>
-                                    
-                                </ul>
-                            </div>
-                        </li>
+                        
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#product-setting">
                                 <i class="fas fa-box-open"></i>

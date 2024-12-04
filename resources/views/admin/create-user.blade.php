@@ -123,7 +123,6 @@
 
                 // Gather form data into FormData object
                 let formData = new FormData($('#AddUserForm')[0]);
-                console.log(formData);
 
                 // AJAX request to create user
                 $.ajax({
@@ -136,7 +135,6 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        console.log(response)
                         // If no errors, redirect to user list page
                         if ($.isEmptyObject(response.error)) {
                             $('#AddUserForm')[0].reset();

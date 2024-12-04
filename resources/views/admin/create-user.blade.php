@@ -94,6 +94,11 @@
                             <h6 class="text-danger pt-1" id="wrongroles" style="font-size: 14px;"></h6>
 
                         </div>
+                        <div class="form-group col-md-6 col-sm-12">
+                            <label for="image" style="font-weight: normal;">Profile Image</label>
+                            <input type="file" class="form-control w-75" id="image" name="image" accept="image/*">
+                            <h6 class="text-danger pt-1" id="wrongimage" style="font-size: 14px;"></h6>
+                        </div>
 
                     </div>
 

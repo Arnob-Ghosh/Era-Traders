@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Log;    
 use Illuminate\Validation\Rules;
-use App\Models\Role;
+use Log;    
 
 class UserController extends Controller
 {
@@ -55,6 +56,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => $request->password,
                 'contact_number' => $request->contactnumber,
+                'image' => $request->hasFile('image') ? $request->file('image')->store('users', 'public') : null,
             ]);
 
             // Assign the roles to the user
@@ -132,8 +134,17 @@ class UserController extends Controller
             if ($request->password) {
                 $user->password = $request->password;
             }
+            // Handle image upload if provided
+            if ($request->hasFile('image')) {
+                // Delete previous image if it exists
+                if ($user->image) {
+                    Storage::disk('public')->delete($user->image);
+                }
+                $path = $request->file('image')->store('users', 'public');
+                $user->image = $path;
+            }
             $user->save();
-            // Detach and re-assign roles to the user
+            // Detach and re-assign roles to the user 
             if ($request->roles) {
                 $user->roles()->detach();
                 $user->assignRole($request->roles);
@@ -156,13 +167,17 @@ class UserController extends Controller
     {
         // Find the user by ID
         $user = User::find($id);
-        // If user exists, delete the user
+        
+        // If user exists, delete image and user
         if (!is_null($user)) {
+            // Delete user's image if it exists
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image);
+            }
             $user->delete();
         }
-        // Flash success message to session
-        session()->flash('success', 'User has been deleted !!');
-        // Redirect back to the previous page
-        return back();
+
+        // Return success response
+        return redirect()->back()->with('status', 'User has been deleted !!');
     }
 }

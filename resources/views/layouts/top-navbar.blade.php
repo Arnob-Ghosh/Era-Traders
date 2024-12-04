@@ -13,12 +13,12 @@
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                     aria-expanded="false">
                     <div class="avatar-sm">
-                        <img src="{{ asset('') }}assets/img/profile.jpg" alt="..."
+                        <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('assets/img/profile.jpg') }}" alt="..."
                             class="avatar-img rounded-circle" />
                     </div>
                     <span class="profile-username">
                         <span class="op-7">Hi,</span>
-                        <span class="fw-bold">Hizrian</span>
+                        <span class="fw-bold">{{  Auth::user()->name }}</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -26,12 +26,12 @@
                         <li>
                             <div class="user-box">
                                 <div class="avatar-lg">
-                                    <img src="{{ asset('') }}assets/img/profile.jpg"
+                                    <img src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : asset('assets/img/profile.jpg') }}"
                                         alt="image profile" class="avatar-img rounded" />
                                 </div>
                                 <div class="u-text">
-                                    <h4>Hizrian</h4>
-                                    <p class="text-muted">hello@example.com</p>
+                                    <h4>{{  Auth::user()->name }}</h4>
+                                    <p class="text-muted">{{  Auth::user()->email }}</p>
                                    
                                 </div>
                             </div>

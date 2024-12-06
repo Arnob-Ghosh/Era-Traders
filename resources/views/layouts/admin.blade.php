@@ -41,6 +41,8 @@
     <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
 <!-- DataTables Bootstrap 5 Integration CSS -->
     <link href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
+
 <style>
     .dataTables_wrapper .dt-buttons {
     float: right;
@@ -130,6 +132,7 @@
     <!-- jQuery Vector Maps -->
     <script src="{{ asset('') }}assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
     <script src="{{ asset('') }}assets/js/plugin/jsvectormap/world.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
 
     <!-- Sweet Alert -->
     <script src="{{ asset('') }}assets/js/plugin/sweetalert/sweetalert.min.js"></script>

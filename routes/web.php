@@ -6,11 +6,13 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductInController;
+use App\Http\Controllers\ProductReturnController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -94,6 +96,12 @@ Route::delete('/category-delete/{id}', [CategoryController::class, 'destroy'])->
 Route::get('/product-in', [ProductInController::class, 'view'])->middleware('auth')->name('productin.view');
 Route::post('/product-in', [ProductInController::class, 'store'])->middleware('auth')->name('productin.store');
 // });
+// Route::middleware(['permission:productin.view'])->group(function () {
+    Route::get('/product-in-return', [ProductReturnController::class, 'view'])->middleware('auth')->name('productin-return.view');
+    Route::post('/product-in-return', [ProductReturnController::class, 'store'])->middleware('auth')->name('productin-return.store');
+    Route::get('/product/{productId}/category/{categoryId}/prices', [ProductReturnController::class, 'getPrice']);
+
+    // });
 Route::get('/product/{id}/categories', [ProductController::class, 'getCategoriesForProduct']);
 // Route::middleware(['permission:productin.view'])->group(function () {
 Route::get('/product-in-report', [ProductInController::class, 'report'])->middleware('auth')->name('productin.report.view');

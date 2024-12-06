@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 <!-- Bootstrap Select CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css">
 
 
 @section('content')
@@ -87,6 +86,8 @@
                                         @endforeach
                                         
                                     </select>
+                                    <h6 class="text-danger pt-1" id="edit_wrongcategory" style="font-size: 14px;"></h6>
+
                                 </div>
                             </div>
                         </div>
@@ -136,7 +137,6 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel"><strong>CREATE PRODUCT</strong></h5>
             </div>
-            {{-- Create Client --}}
             <form id="AddProductForm" enctype="multipart/form-data">
 
                 <input type="hidden" name="_method" value="POST">
@@ -179,6 +179,8 @@
                                 @endforeach
                                 
                             </select>
+                            <h6 class="text-danger pt-1" id="wrongcategory" style="font-size: 14px;"></h6>
+
                         </div>
                     </div>
                    
@@ -202,7 +204,6 @@
 
 
 <!-- Bootstrap Select JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"></script>
 <script>
 
     
@@ -326,8 +327,14 @@ if(message.brand == null){
 }else{
     brand = message.brand[0]
 }
+if(message.category == null){
+    category = ""
+}else{
+    category = message.category[0]
+}
 
 
+$('#wrongcategory').append('<span id="">'+category+'</span>');
 $('#wrongproductname').append('<span id="">'+productName+'</span>');
 $('#wrongbrandname').append('<span id="">'+brand+'</span>');
 }
@@ -387,9 +394,11 @@ $(document).on("submit", "#EDITProductFORM", function (e) {
 function printEditErrorMsg(message) {
     $("#edit_wrongproductname").empty();
     $("#edit_wrongbrandname").empty();
-
+    $("#edit_wrongcategory").empty();
+    
     $("#edit_wrongproductname").text(message.productName ? message.productName[0] : "");
     $("#edit_wrongbrandname").text(message.brand ? message.brand[0] : "");
+    $("#edit_wrongcategory").text(message.brand ? message.category[0] : "");
 }
 
 </script>

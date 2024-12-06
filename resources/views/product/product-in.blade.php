@@ -74,7 +74,7 @@
                                     <!-- Sub Unit Selection -->
                                     <div class="form-group col-4">
                                         <label for="sub_unit_type" style="font-weight: normal;">Sub Unit Type<span
-                                                class="text-danger"><strong></strong></span></label>
+                                                class="text-danger"><strong></strong>*</span></label>
                                         <select id="sub_unit_type" name="sub_unit"
                                             class="form-control w-100 selectpicker d-block mt-2"
                                             data-placeholder="Please select a sub-unit">
@@ -86,7 +86,8 @@
 
                                     <!-- Extra Subunit Field (Initially hidden) -->
                                     <div class="form-group col-4" id="extra_subunit_field" style="display: none;">
-                                        <label for="subunit" style="font-weight: normal;">Subunit</label>
+                                        <label for="subunit" style="font-weight: normal;">Subunit <span
+                                            class="text-danger"><strong>*</strong></span></label>
                                         <input type="text" id="subunit" name="subunit"
                                             class="form-control w-100 d-block mt-2" placeholder="Enter subunit value">
                                     </div>
@@ -94,7 +95,7 @@
 
                                     <!-- Unit Price -->
                                     <div class="form-group col-4">
-                                        <label for="unit_price" style="font-weight: normal;">Price<span
+                                        <label for="unit_price" style="font-weight: normal;">Total Price <span
                                                 class="text-danger"><strong>*</strong></span></label>
                                         <input type="number" step="0.01" name="price" id="price"
                                             class="form-control mt-2" placeholder="Enter Unit Price" required>
@@ -160,6 +161,8 @@
              function resetButton() {
             $('#productInForm')[0].reset();
             $('.selectpicker').selectpicker('refresh');
+            $('#errorMsg').empty();
+
         }
         $(document).ready(function() {
             resetButton()
@@ -258,6 +261,8 @@
 
                 // Clear form after adding
                 resetButton();
+                $('#errorMsg').empty();
+
             } else {
                 $('#errorMsg').text('Please fill in all required fields.');
             }

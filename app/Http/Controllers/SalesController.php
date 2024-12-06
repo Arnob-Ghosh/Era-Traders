@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Inventory;
+use App\Models\Invoiceprices;
 use App\Models\Sales;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -124,6 +125,15 @@ class SalesController extends Controller
     
             // Calculate the total
             $total = $subtotal ;
+            Invoiceprices::create([ 
+                'ref_id' => $refId,
+                'total_price' => $total,
+                'paid' => $request->paid,
+                'due' => $total - $request->paid,
+                'customer_id' => $customerId,  
+                'customer_name' => $customer->name,
+                'date' => now(),    
+            ]);
     
             // Commit the transaction
             DB::commit();
@@ -137,6 +147,7 @@ class SalesController extends Controller
                 'sales_items' => $invoiceItems,
                 'subtotal' => $subtotal,
                 'total' => $total,
+                'paid' => $request->paid,
             ]);
     
         } catch (\Exception $e) {

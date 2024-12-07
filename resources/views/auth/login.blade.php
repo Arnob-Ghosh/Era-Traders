@@ -1,6 +1,6 @@
 <html lang="en" class="wf-publicsans-n3-active wf-publicsans-n4-active wf-publicsans-n5-active wf-publicsans-n6-active wf-publicsans-n7-active wf-fontawesome5solid-n4-active wf-fontawesome5regular-n4-active wf-fontawesome5brands-n4-active wf-simplelineicons-n4-active wf-active"><head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Login &amp; Register - Kaiadmin Bootstrap 5 Admin Dashboard</title>
+    <title>Login</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
     <link rel="icon" href="assets/img/kaiadmin/favicon.ico" type="image/x-icon">
 

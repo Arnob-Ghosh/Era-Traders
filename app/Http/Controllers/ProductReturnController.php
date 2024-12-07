@@ -30,18 +30,21 @@ class ProductReturnController extends Controller
     
     public function store(Request $request)
 {
+    Log::info($request->all());
     try {
         // Validate input data
         $validator = Validator::make($request->all(), [
             
-            'product' => 'required|integer',
-            'category' => 'required|integer',
-            'unit_id' => 'required|integer',
-            'unit' => 'required|string',
-            'quantity' => 'required|numeric|min:1',
-            'unit_price' => 'required|numeric|min:1',
-            'product_name' => 'required|string',
-            'category_name' => 'required|string',
+            'products' => 'required|array',
+            'products.*.product_id' => 'required|integer',
+            'products.*.category_id' => 'required|integer',
+            'products.*.unit_quantity' => 'required|numeric|min:0',
+            'products.*.unit_name' => 'required|string',
+            'products.*.unit_price' => 'required|numeric|min:0', 
+            'products.*.sub_unit' => 'required|numeric|min:0',
+            'products.*.return_quantity' => 'required|numeric|min:1',
+            'products.*.product_name' => 'required|string',
+            'products.*.category_name' => 'required|string'
         ]);
 
         if ($validator->fails()) {
@@ -49,61 +52,62 @@ class ProductReturnController extends Controller
         }
 
         DB::beginTransaction();
-
-            $quantity = (float) $productData['quantity'];
-            $unitPrice = (float) $productData['unit_price'];
-            $subUnitQuantity = (float) $productData['sub_unit'];
+        $return_number = 'PRN-' . now()->format('YmdHis');
+        // Loop through each product in the request
+        foreach ($request->products as $product) {
+            $quantity = (float) $product['return_quantity'];
 
             // Check inventory for the product
             $inventory = Inventory::where([
-                ['product_id', $productData['product']],
-                ['unit_id', $productData['unit_id']],
-                ['sub_unit_id', $productData['sub_unit']],
-                ['unit_price', $unitPrice],
+                ['product_id', $product['product_id']],
+                ['category_id', $product['category_id']], 
+                ['unit_quantity', $product['unit_quantity']],
+                ['unit_price', $product['unit_price']],
             ])->first();
 
             if (!$inventory) {
-                return response()->json(['error' => 'Inventory not found for product: ' . $productData['product_name']], 404);
+                return response()->json(['error' => 'Inventory not found for product: ' . $product['product_name'],'status'=>400]);
             }
 
             // Ensure sufficient inventory quantity
             if ($inventory->unit_quantity < $quantity) {
                 return response()->json([
-                    'error' => 'Insufficient quantity for product: ' . $productData['product_name']
-                ], 400);
+                    'error' => 'Insufficient quantity for product: ' . $product['product_name'],'status'=>400
+                ]);
             }
 
             // Update inventory quantities
             $inventory->update([
                 'unit_quantity' => $inventory->unit_quantity - $quantity,
-                // 'sub_unit_quantity' => $inventory->sub_unit_quantity - ($quantity * $subUnitQuantity), // Uncomment if sub-unit management is needed
             ]);
 
-            // Record the return in history
+            // Create return history record
             ProductReturnHistory::create([
-                'product_id' => $productData['product'],
-                'product_name' => $productData['product_name'],
-                'category_id' => $productData['category'],
-                'category_name' => $productData['category_name'],
-                'quantity' => $quantity,
-                'unit_id' => $productData['unit_id'],
-                'unit' => $productData['unit'],
-                'sub_unit_id' => $productData['sub_unit'],
-                'sub_unit_name' => $productData['sub_unit_name'],
-                'unit_price' => $unitPrice,
-                'return_num' => 'PRN-' . uniqid(), // Generate a unique return number
+                'product_id' => $product['product_id'],
+                'product_name' => $product['product_name'],
+                'category_id' => $product['category_id'], 
+                'category_name' => $product['category_name'],
+                'unit_id' => $inventory->unit_id,
+                'unit' => $product['unit_name'],
+                'sub_unit_id' => $inventory->sub_unit_id,
+                'sub_unit_name' => $inventory->sub_unit_name,
+                'quantity' => $product['return_quantity'],
+                'unit_price' => $product['unit_price'],
+                'return_num' => $return_number,
                 'date' => now(),
                 'created_by' => Auth::user()->id,
+                'note' => null,
             ]);
+        }
 
         DB::commit();
 
         return response()->json(['success' => 'Product return processed successfully']);
     } catch (\Exception $e) {
         DB::rollBack();
-        Log::error('Error processing product return: ' . $e->getMessage());
+        Log::error('Error processing product return: ' . $e->getMessage() . ' Line: ' . $e->getLine()); 
 
-        return response()->json(['error' => 'An error occurred while processing the return. Please try again later.'], 500);
+        return response()->json(['error' => 'An error occurred while processing the return. Please try again later.','status'=>400]);
     }
 }
 

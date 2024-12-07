@@ -10,8 +10,10 @@ use App\Http\Controllers\ProductReturnController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -157,3 +159,18 @@ Route::put('/role-edit/{id}', [RoleController::class, 'update'])->name('admin.ro
 Route::delete('/role-delete/{id}', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
 
 // });
+
+
+// Route::middleware(['permission:unit.create'])->group(function () {
+    Route::get('/unit-create', [UnitController::class, 'create'])->middleware('auth')->name('unit.create');
+    Route::post('/unit-create', [UnitController::class, 'store'])->middleware('auth')->name('unit.store');
+    // });
+    
+    Route::get('/unit-list-data', [UnitController::class, 'list'])->name('unit.list');
+    // Route::middleware(['permission:vat.edit'])->group(function () {
+    
+    Route::get('/unit-edit/{id}', [UnitController::class,'edit'])->middleware('auth')->name('unit.edit.view');
+    Route::put('/unit-edit/{id}', [UnitController::class,'update'])->middleware('auth')->name('unit.edit');
+    // });
+    
+    Route::delete('/unit-delete/{id}', [UnitController::class,'destroy'])->name('unit.destroy');

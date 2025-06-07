@@ -8,23 +8,7 @@
         <div class="page-header">
          
     </div>
-    <div class="row">
-        <div class="col-sm-6 col-lg-4">
-            <div class="card p-3">
-                <div class="d-flex align-items-center">
-                    <span class="stamp stamp-md bg-secondary justify-content-center d-flex align-items-center me-3" 
-                          style="height: 50px; width: 50px; ">
-                        <i class="fa fa-dollar-sign" style="font-size: 20px; color: white;"></i>
-                    </span>
-                    <div ><h4 id="stock_price"> Total Stock Price: </h4>
-                        <!-- Empty div that needs to be populated with inventory data -->
-                        <!-- Based on the controller, this should display the total inventory price ($inventory_price) -->
-                        <!-- Need to add JavaScript to populate this div using the AJAX response data -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+   
     
 
         <div class="row">
@@ -32,15 +16,11 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <h4 class="card-title">Inventory Management</h4>
+                            <h4 class="card-title">Product In Return</h4>
 
                         </div>
                     </div>
                     <div class="card-body">
-                        <!-- Modal -->
-
-
-
                         <div class="table-responsive">
                             <table id="inventory_table" class="display table table-striped table-hover">
                                 <thead>
@@ -69,21 +49,18 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "/inventory-report-data",
-                    dataSrc: function(json) {
-                        // Update the stock value with the price from the response
-                        console.log(json);
-                        if (json.price) {
-                            $('#stock_price').append( json.price.toFixed(2)+' ৳');
-                        }
-                        return json.data;
-                    },
+                    url: "/product-in-return-report-data",
+                    dataSrc: 'data',
                     dataType: "json",
                 },
                 columns: [
                     {
                         data: null,
                         title: '#'
+                    },
+                    {
+                        data: 'date',
+                        title: 'Date'
                     },
                     {
                         data: 'product_name',
@@ -93,29 +70,17 @@
                         data: 'category_name',
                         title: 'Category'
                     },
+                   
                     {
                         data: null,
-                        title: 'Quantity',
+                        title: 'Return Quantity',
                         render: function(data, type, row) {
-                            return row.unit_quantity + ' - ' + row.unit_name;
+                            return row.quantity + ' - ' + row.unit;
                         }
                     },
-                    {
-                        data: null,
-                        title: 'SubUnit Quantity',
-                        render: function(data, type, row) {
-                            return (row.sub_unit_quantity)
-                                ' - ' + row.sub_unit_name;
-                        }
-                    },
-                    {
-                        data: 'unit_price',
-                        title: 'Unit Price'
-                    },
-                    {
-                        data: 'sub_unit_price',
-                        title: 'Sub Unit Price'
-                    },
+                    
+                   
+                    
                 ],
                 columnDefs: [
                     {

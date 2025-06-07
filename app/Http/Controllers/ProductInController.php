@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Services\ProductInService;
 use App\Models\Category;
 use App\Models\Product; // Importing Product model
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; // Importing Auth facade
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Log;
+
 class ProductInController extends Controller
 {
     // Property to hold the instance of ProductInService
@@ -27,11 +29,13 @@ class ProductInController extends Controller
         // Retrieve necessary data from models
         $products = Product::get();
         $categories = Category::get();
+        $units = Unit::all();
 
         // Return view 'product.product-in' with data
         return view('product.product-in', [
             'products' => $products,
             'categories' => $categories,
+            'units' => $units,
            
         ]);
     }
@@ -46,9 +50,7 @@ class ProductInController extends Controller
   
     public function report()
     {
-        // Retrieve necessary data from models
-
-
+      
         // Return view 'product.product-in' with data
         return view('product.product-in-report');
     }

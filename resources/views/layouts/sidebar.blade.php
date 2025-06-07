@@ -92,6 +92,11 @@
                                             <span class="sub-item">Product In</span>
                                         </a>
                                     </li>
+                                    <li class="nav-item {{ request()->is('product-in-return') ? 'active' : '' }}">
+                                        <a href="/product-in-return">
+                                            <span class="sub-item">Product In Return</span>
+                                        </a>
+                                    </li>
                                     <li class="nav-item {{ request()->is('inventory-report') ? 'active' : '' }}">
                                         <a href="/inventory-report">
                                             <span class="sub-item">Inventory</span>
@@ -111,6 +116,11 @@
                                     <li class="nav-item {{ request()->is('product-in-report') ? 'active' : '' }}">
                                         <a href="/product-in-report">
                                             <span class="sub-item">Product In Report</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item {{ request()->is('product-in-return-report') ? 'active' : '' }}">
+                                        <a href="/product-in-return-report">
+                                            <span class="sub-item">Product In Return Report</span>
                                         </a>
                                     </li>
                                     <li class="nav-item {{ request()->is('sales-report') ? 'active' : '' }}">

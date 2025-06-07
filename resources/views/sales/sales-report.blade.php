@@ -74,11 +74,25 @@
             </div>
         </div>
     </div>
+
+
+      <!-- Invoice Modal -->
+      <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceModalLabel">Invoice Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="invoiceModalBody">
+                    <!-- Invoice HTML will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('js')
-   
-
-
+<script type="text/JavaScript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery.print/1.6.0/jQuery.print.js"></script>
 
     <script>
         $(document).ready(function() {
@@ -133,6 +147,14 @@
                     {
                         data: 'total_sale_price',
                         title: 'Amount'
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, row) {
+                            return row.invoice_price && row.invoice_price[0] ? row.invoice_price[0]
+                                .paid : 0;
+                        },
+                        title: 'Paid '
                     },
                     {
                         data: null, // Actions column
@@ -225,69 +247,247 @@
                 success: function(response) {
                     // Construct the invoice HTML
                     let invoiceHtml = `
-                <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="invoiceModalLabel">Sales Detail</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="invoice-header row ">
-                                    <div class="col-4"><h3>Invoice</h3> </div>
-                                    <div class="col-4"> <p>Invoice ID: #${response.ref_id}</p></div>
-                                    <div class="col-4"><p>Customer: ${response.customer_name} <br> ${response.customer_mobile} </p></div>
-                                </div>
-                                   <p>Date: ${response.date}</p> 
+                
+            <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Tax Invoice</title>
+                        <style>
+                                @page {
+                                    margin: 0; /* Removes all page margins */
+                                    size: A4; /* Sets the page size to A4 */
+                                }
+                            body {
+                                font-family: Arial, sans-serif;
+                                margin: 0;
+                                padding: 0;
+                                line-height: 1.5;
+                                color: #000;
+                            }
+                            .invoice-container {
+                                padding: 20px;
+                                margin: auto;
+                            }
+                            .header {
+                                display: flex;
+                                align-items: center;
+                                margin-bottom: 20px;
+                            }
+                            .header img {
+                                max-width: 120px;
+                                margin-right: 20px;
+                            }
+                            .header-title {
+                                flex: 1;
+                                text-align: center;
+                                margin-right: 30px;
+                            }
+                            .header-title h1 {
+                                font-size: 20px;
+                                margin: 0;
+                            }
+                        
+                            .info-section {
+                                display: flex;
+                                justify-content: space-between;
+                                margin-bottom: 20px;
+                            }
+                        
+                            .sales-table, .pricing-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-bottom: 20px;
+                            }
+                            .sales-table th, .sales-table td,
+                            .pricing-table th, .pricing-table td {
+                                border: 1px solid #000;
+                                padding: 8px;
+                                text-align: left;
+                            }
+                            .sales-table th {
+                                background-color: #f2f2f2;
+                            }
+                            .instructions {
+                                font-size: 12px;
+                                margin-top: 20px;
+                            }
+                            .footer {
+                                margin-top: 20px;
+                                font-size: 12px;
+                            }
+                            .signature {
+                                text-align: right;
+                                margin-top: 40px;
+                                font-size: 14px;
+                            }
+                            
 
-                                <div class="invoice-details">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Product Name</th>
-                                                <th>Category</th>
-                                                <th>Unit</th>
-                                                <th>Quantity</th>
-                                                <th>Price</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            ${response.items
-                                                .map(
-                                                    (item) => `
-                                                    <tr>
-                                                        <td>${item.product_name}</td>
-                                                        <td>${item.category_name}</td>
-                                                        <td>${item.sale_unit}</td>
-                                                        <td>${item.sale_quantity}</td>
-                                                        <td>${item.unit_price}</td>
-                                                        <td>${item.sale_price}</td>
-                                                    </tr>`
-                                                )
-                                                .join('')}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="invoice-summary text-end me-3">
-                                    <h4 style="color:black;">Total Amount: ${response.total_sale_price}</h4>
+                        </style>
+                    </head>
+                    <body>
+                        <div class="invoice-container">
+                            <!-- Header -->
+                            <div class="header">
+                                    <h1 class="header-title me-3">Era Traders</h1>
+
+                                
+                            </div>
+
+                            <!-- Info Section -->
+                            <div class="info-section table table-bordered">
+                                <!-- Customer Info -->
+                                <table class=" table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <th colspan="2">BILL TO:</th></tr>
+
+                                    <tr>
+                                        <td>Customer:</td>
+                                        <td>${response.customer_name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contact No:</td>
+                                        <td>${response.customer_mobile}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address:</td>
+                                        <td>${response.customer_address ? response.customer_address : ""}</td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                                <br>
+                                <br>
+                                <table class="table-bordered">
+                                    <tr>
+                                        <th colspan="2">Tax Invoice:</th></tr>
+                                    <tr>
+                                        <td>Date:</td>
+                                        <td>${response.date}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Invoice No:</td>
+                                        <td>#${response.ref_id}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Customer ID:</td>
+                                        <td>C-${response.customer_id}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                                <br>
+                                <br>
+                                <br>
+
+
+                            <!-- Sales Table -->
+                            <table class="sales-table ">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Qty</th>
+                                        <th>Unit</th>
+                                        <th>Unit Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${response.items .map((item,index) => `
+                                                                    <tr>
+                                                                        <td>${index + 1}</td>
+                                                                        <td>${item.product_name}</td>
+                                                                        <td>${item.category_name}</td>
+                                                                        <td>${item.sale_quantity}</td>
+                                                                        <td>${item.unit}</td>
+                                                                        <td>${(item.sale_price/item.sale_quantity).toFixed(2)}</td>
+                                                                        <td>${item.sale_price}</td>
+                                                                    </tr>`
+                                                            )
+                                                            .join('')}
+                                </tbody>
+                            </table> <br><br>
+
+                        <!-- Combined Pricing and Instructions Table -->
+                        <table class="table">
+                <tr>
+                    <!-- Instruction Column -->
+                    <td style="width: 70%; border: 1px solid black; vertical-align: top; ">
+                        * All prices are quoted in BDT, excluding VAT & Tax.<br>
+                        * Any damage claims must be made within 7 days of delivery.<br>
+                        * Goods remain the property of Era Traders until full payment has been received.<br>
+                    </td>
+                    <!-- Pricing Column -->
+                    <td style="width: 30%; ">
+                        <table class="table table-striped">
+                            <tr style="border-top:10px;">
+                                <td style="border: 1px solid black; ">Sub Total:</td>
+                                <td style="border: 1px solid black; ">${response.total_sale_price}</td>
+                            </tr>
+                            <tr style="border-top:10px;">
+                                <td style="border: 1px solid black; ">Discount:</td>
+                                <td style="border: 1px solid black; ">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; ">Total:</td>
+                                <td style="border: 1px solid black; ">${response.total_sale_price}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; ">Paid:</td>
+                                <td style="border: 1px solid black; ">${response.paid}</td>
+                            </tr>
+                        
+                        </table>
+                    </td>
+                </tr>
+                                <!-- Note/Remarks Section -->
+                                <tr>
+                                    <td colspan="2" style="border: 1px solid black; padding: 8px;">Note/Remarks:</td>
+                                </tr><br><br>
+                            </table>
+                            <p class="text-center">Palang, Uttar Bazar, Sadar Shariatpur, Byapari Complex</p>
+                        
+                                <div class="footer" style="width: 95%;">
+                                <p style="text-align: center;">Thank you for your business</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px; width: 100%;">
+                                    <div style="text-align: left; width: 50%;">
+                                        <p><u>Received By</u></p>
+                                    </div>
+                                    <div style="text-align: right; width: 50%;">
+                                        <p><u>Authorized By</u></p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
+
+                                        </div>
+                    </body>
+                    </html>
+
+                                  `;
 
                     // Append the modal to the body and show it
-                    $('body').append(invoiceHtml);
-                    $('#invoiceModal').modal('show');
+                    // $('body').append(invoiceHtml);
+                    // $('#invoiceModal').modal('show');
 
-                    // Remove the modal after it's hidden
-                    $('#invoiceModal').on('hidden.bs.modal', function() {
-                        $(this).remove();
-                    });
+                    // // Remove the modal after it's hidden
+                    // $('#invoiceModal').on('hidden.bs.modal', function() {
+                    //     $(this).remove();
+                    // });
+                    // Load the generated invoice into the modal
+                    $('#invoiceModalBody').html(invoiceHtml);
+                    // $('#invoiceModal').modal('show');
+
+                        $('#invoiceModalBody').print();
+                        // let printInterval = setInterval(function() {
+                        //     if (document.hasFocus()) {
+                        //         clearInterval(printInterval);
+                        //         $('#invoiceModal').modal('hide'); // Close the modal
+                        //         window.location = "/sales";
+                        //     }
+                        // }, 500);
                 },
                 error: function(xhr, status, error) {
                     console.error('Error fetching invoice data:', error);
@@ -295,8 +495,5 @@
                 }
             });
         });
-       
-  
-
     </script>
 @endsection

@@ -128,5 +128,21 @@ public function getPrice($productId, $categoryId)
     }
 }
 
+public function report_view ()
+{
+
+    return view('product.product-return-view');
+
+}
+public function report_data(Request $request)
+{
+    $data = ProductReturnHistory::get();
+    // Return success JSON response
+    return response()->json([
+        'status' => 200,
+        'data' => $data,
+    ]);
+
+}
 
 }

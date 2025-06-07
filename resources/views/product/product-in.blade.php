@@ -67,7 +67,10 @@
                                         <select id="unit" name="unit"
                                             class="form-control w-100 selectpicker d-block mt-2"
                                             data-placeholder="Please select a unit">
-                                            <option value="1">Breil</option>
+                                            @foreach ($units as $unit)
+                                                
+                                            @endforeach
+                                            <option value="{{ $unit->id}}">{{ $unit->name }}</option>
                                         </select>
                                     </div>
 

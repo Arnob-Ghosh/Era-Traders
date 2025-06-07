@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Invoiceprices;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -28,4 +29,9 @@ class Sales extends Model
         'customer_id',
         'ref_id'
     ];
+
+    
+    public function invoice_price(){
+        return $this->hasMany(Invoiceprices::class,'ref_id','ref_id');
+    }
 }

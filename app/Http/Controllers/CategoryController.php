@@ -102,9 +102,6 @@ class CategoryController extends Controller
     {
         Category::find($id)->delete($id);
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Deleted successfully!'
-        ]);
+        return redirect()->back()->with('status', 'Deleted successfully!');
     }
 }

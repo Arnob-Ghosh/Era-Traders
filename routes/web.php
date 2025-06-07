@@ -10,9 +10,11 @@ use App\Http\Controllers\ProductReturnController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -108,6 +110,11 @@ Route::post('/product-in', [ProductInController::class, 'store'])->middleware('a
     Route::get('/product/{productId}/category/{categoryId}/prices', [ProductReturnController::class, 'getPrice']);
 
     // });
+    // Route::middleware(['permission:productin.view'])->group(function () {
+        Route::get('/product-in-return-report', [ProductReturnController::class, 'report_view'])->middleware('auth')->name('productin-return.report.view');
+        Route::get('/product-in-return-report-data', [ProductReturnController::class, 'report_data'])->middleware('auth')->name('productin-return.report');
+    
+        // });
 Route::get('/product/{id}/categories', [ProductController::class, 'getCategoriesForProduct']);
 // Route::middleware(['permission:productin.view'])->group(function () {
 Route::get('/product-in-report', [ProductInController::class, 'report'])->middleware('auth')->name('productin.report.view');
@@ -123,7 +130,13 @@ Route::get('/sales', [SalesController::class, 'view'])->middleware('auth')->name
 Route::get('/sales-inventory-data', [SalesController::class, 'data'])->middleware('auth');
 Route::post('/sales-store', [SalesController::class, 'store'])->middleware('auth');
 // });
-
+// Route::middleware(['permission:productin.view'])->group(function () {
+    Route::get('/sales-return', [SalesReturnController::class, 'view'])->middleware('auth')->name('sales.view');
+    Route::post('/sales-retutrn-store', [SalesReturnController::class, 'store'])->middleware('auth');
+    Route::get('/sales-info-data', [SalesReturnController::class, 'sales_info_data'])->middleware('auth');
+    Route::post('/sales-list', [SalesReturnController::class, 'store'])->middleware('auth');
+    Route::post('/sales-list-data', [SalesReturnController::class, 'store'])->middleware('auth');
+    // });
 // Route::middleware(['permission:productin.view'])->group(function () {
     Route::get('/sales-report', [SalesController::class, 'report_view'])->middleware('auth')->name('sales.view');
     Route::get('/sales-report-data', [SalesController::class, 'report_data'])->middleware('auth');

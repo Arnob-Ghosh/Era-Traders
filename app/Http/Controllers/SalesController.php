@@ -38,7 +38,6 @@ class SalesController extends Controller
         DB::beginTransaction();
     
         try {
-            Log::info($request);
     
             // Generate refId using current timestamp and a random string
             $refId = 'REF-' . now()->timestamp . '-' . strtoupper(Str::random(6));
@@ -143,6 +142,7 @@ class SalesController extends Controller
                 'message' => 'Sales records have been stored successfully',
                 'invoice_id' => $refId,  // Include the refId for invoice ID
                 'customer_name' => $customer->name,
+                'customer_id' => $customer->id,
                 'customer_mobile' => $customer->mobile,  // Assuming customer has an address
                 'sales_items' => $invoiceItems,
                 'subtotal' => $subtotal,
@@ -198,8 +198,8 @@ class SalesController extends Controller
             }
     
             // Group the query by ref_id and get the results
-            $data = $query->groupBy('ref_id','customer_name','date')->get();
-    
+            $data = $query->groupBy('ref_id','customer_name','date')->with('invoice_price')->get();
+            log::info($data);
             return response()->json([
                 'status' => 200,
                 'data'   => $data,
@@ -213,39 +213,41 @@ class SalesController extends Controller
             ]);
         }
     }
-
     public function getInvoiceData(Request $request)
-{
-    $refId = $request->input('ref_id');
-    // Fetch sales data by ref_id
-    $salesData = Sales::where('ref_id', $refId)->get();
-    $customer_mobile=Client::find($salesData[0]->customer_id);
+    {
+        $refId = $request->input('ref_id');
+        // Fetch sales data by ref_id
+        $salesData = Sales::where('ref_id', $refId)->with('invoice_price')->get();
+        $customer_mobile=Client::find($salesData[0]->customer_id);
 
-    if ($salesData->isEmpty()) {
-        return response()->json(['error' => 'No data found'], 404);
+        if ($salesData->isEmpty()) {
+            return response()->json(['error' => 'No data found'], 404);
+        }
+
+        // Format response
+        $response = [
+            'ref_id' => $refId,
+            'customer_name' => $salesData[0]->customer_name,
+            'customer_id' => $salesData[0]->customer_id,
+            'customer_mobile' => $customer_mobile->mobile,
+            'date' => $salesData[0]->date,
+            'items' => $salesData->map(function ($item) {
+                return [
+                    'product_name' => $item->product_name,
+                    'category_name' => $item->category_name,
+                    'sale_unit' => $item->sale_unit,
+                    'sale_quantity' => $item->sale_quantity,
+                    'unit_price' => $item->unit_price,
+                    'unit' => $item->sale_unit,
+                    'sale_price' => $item->sale_price,
+                ];
+            }),
+            'total_sale_price' => $salesData->sum('sale_price'),
+            'paid' => Invoiceprices::where('ref_id', $refId)->first()->paid,
+        ];
+
+        return response()->json($response);
     }
-
-    // Format response
-    $response = [
-        'ref_id' => $refId,
-        'customer_name' => $salesData[0]->customer_name,
-        'customer_mobile' => $customer_mobile->mobile,
-        'date' => $salesData[0]->date,
-        'items' => $salesData->map(function ($item) {
-            return [
-                'product_name' => $item->product_name,
-                'category_name' => $item->category_name,
-                'sale_unit' => $item->sale_unit,
-                'sale_quantity' => $item->sale_quantity,
-                'unit_price' => $item->unit_price,
-                'sale_price' => $item->sale_price,
-            ];
-        }),
-        'total_sale_price' => $salesData->sum('sale_price'),
-    ];
-
-    return response()->json($response);
-}
 
     
     

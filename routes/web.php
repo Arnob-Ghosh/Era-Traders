@@ -123,6 +123,7 @@ Route::get('/product-in-report-data', [ProductInController::class, 'report_data'
 // Route::middleware(['permission:productin.view'])->group(function () {
 Route::get('/inventory-report', [InventoryController::class, 'report'])->middleware('auth')->name('productin.report.view');
 Route::get('/inventory-report-data', [InventoryController::class, 'report_data'])->middleware('auth')->name('productin.report');
+Route::get('/inventory-report-data-quantity-wise', [InventoryController::class, 'quantiy_wise_report_data'])->middleware('auth')->name('quantitywise-inventory.report');
 // });
 
 // Route::middleware(['permission:productin.view'])->group(function () {

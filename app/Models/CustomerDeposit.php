@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,11 +14,13 @@ class CustomerDeposit extends Model
         'amount',
         'date',
         'customer_id',
+        'sales_id',
+        'note',
     ];
     
 
        public function customer()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(Client::class);
     }
 }

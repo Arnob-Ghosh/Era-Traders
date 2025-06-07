@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CustomerDepositController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -100,6 +102,17 @@ Route::put('/category-edit/{id}', [CategoryController::class, 'update'])->middle
 
 Route::delete('/category-delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
+Route::get('/deposit-create', [CustomerDepositController::class, 'create'])->middleware('auth')->name('deposit.create');
+Route::post('/deposit-create', [CustomerDepositController::class, 'store'])->middleware('auth')->name('deposit.store');
+
+
+Route::get('/deposit-edit/{id}', [CustomerDepositController::class, 'edit'])->middleware('auth')->name('deposit.edit.view');
+Route::put('/deposit-edit/{id}', [CustomerDepositController::class, 'update'])->middleware('auth')->name('deposit.edit');
+// });
+
+Route::get('/deposit-list-data', [CustomerDepositController::class, 'list'])->middleware('auth')->name('deposit.list');
+
+Route::delete('/deposit-delete/{id}', [CustomerDepositController::class, 'destroy'])->name('deposit.destroy');
 // Route::middleware(['permission:productin.view'])->group(function () {
 Route::get('/product-in', [ProductInController::class, 'view'])->middleware('auth')->name('productin.view');
 Route::post('/product-in', [ProductInController::class, 'store'])->middleware('auth')->name('productin.store');

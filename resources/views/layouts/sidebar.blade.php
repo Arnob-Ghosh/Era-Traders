@@ -32,12 +32,12 @@
                                 </span>
                             </a>   
                         </li>
-                        <li class="nav-section">
+                        {{-- <li class="nav-section">
                             <span class="sidebar-mini-icon">
                                 <i class="fa fa-ellipsis-h"></i>
                             </span>
                             <h4 class="text-section">Components</h4>
-                        </li>
+                        </li> --}}
                         
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#product-setting">
@@ -73,6 +73,11 @@
                                     <li class="nav-item {{ request()->is('sales') ? 'active' : '' }}">
                                         <a href="/sales">
                                             <span class="sub-item">Sales</span>
+                                        </a>
+                                    </li>
+                                     <li class="nav-item {{ request()->is('deposit-create') ? 'active' : '' }}">
+                                        <a href="/deposit-create">
+                                            <span class="sub-item">Customer Deposit</span>
                                         </a>
                                     </li>
                                     
@@ -126,6 +131,11 @@
                                     <li class="nav-item {{ request()->is('sales-report') ? 'active' : '' }}">
                                         <a href="/sales-report">
                                             <span class="sub-item">Sales Report</span>
+                                        </a>
+                                    </li>
+                                     <li class="nav-item {{ request()->is('due-report') ? 'active' : '' }}">
+                                        <a href="/due-report">
+                                            <span class="sub-item">Customer Due Report</span>
                                         </a>
                                     </li>
                                    

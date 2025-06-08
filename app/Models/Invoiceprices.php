@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Client;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,4 +18,9 @@ class Invoiceprices extends Model
         'customer_name',
         'date',
     ];
+    public function customer()
+{
+    return $this->belongsTo(Client::class, 'customer_id');
+}
+
 }

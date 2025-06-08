@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\CustomerDepositController;
+use App\Http\Controllers\DueReportController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -138,6 +140,10 @@ Route::get('/inventory-report', [InventoryController::class, 'report'])->middlew
 Route::get('/inventory-report-data', [InventoryController::class, 'report_data'])->middleware('auth')->name('productin.report');
 Route::get('/inventory-report-data-quantity-wise', [InventoryController::class, 'quantiy_wise_report_data'])->middleware('auth')->name('quantitywise-inventory.report');
 // });
+
+Route::get('/due-report', [DueReportController::class, 'index'])->middleware('auth')->name('due.report.view');
+Route::get('/due-report-data', [DueReportController::class, 'due_data'])->middleware('auth')->name('due.report.data');
+
 
 // Route::middleware(['permission:productin.view'])->group(function () {
 Route::get('/sales', [SalesController::class, 'view'])->middleware('auth')->name('sales.view');
